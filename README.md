@@ -10,7 +10,7 @@
 
 ## (Nombre por definir)
 
-[Historias de Usuario]()
+[Historias de Usuario](https://github.com/BeduTeam3/Proyecto-Fase-2/blob/develop/UserStories.md)
 
 [Diagrama de Casos de Uso](https://drive.google.com/file/d/1uPNQ152H4zROCtn1Tq1oagtLlHnww5W1/view?usp=sharing)
 
