@@ -1,21 +1,26 @@
-const Autor = require("../models/Autor");
-const Libro = require("../models/Libro");
+// const Autor = require("../models/Autor");
+// const Libro = require("../models/Libro");
+
+const mongoose = require('mongoose');
+const Autor = mongoose.model('Autor');
 
 // router.get('/', getAutor)
-function getAutor(req, res) {
+function getAutor(req, res, next) {
   //Obtener-Leer
-  var autores = [
-    new Autor("101", "Juan Rulfo", ["001", "002"]),
-    new Autor("102", "Gabriel Garcia Marquez", ["003", "004"]),
-    new Autor("103", "Octavio Paz", ["005", "006"]),
-    new Autor("104", "Carlos Fuentes", ["007", "008"])
-  ];
-  res.send(autores);
+  if (req.params.id) {//Si solo pasan el ID
+    Autor.findById(req.params.id)
+      .then(uno => { res.send(uno) })
+      .catch(next)
+  } else { //Se pide toda la lista de mascotas
+    Autor.find()
+      .then(todos => { res.send(todos) })
+      .catch(next)
+  }
 }
 
 // router.post('/', postAutor)
 function postAutor(req, res) {
-	
+
 }
 
 // router.put('/:id', putAutor)

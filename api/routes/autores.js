@@ -7,9 +7,10 @@ const {
   deleteAutor
 } = require('../controllers/autores')
 
-router.get('/', getAutor)
-router.post('/', postAutor)
-router.put('/:id', putAutor)
-router.delete('/:id', deleteAutor)
+router.get('/', getAutor);
+router.get('/:id', getAutor);
+router.post('/', postAutor);
+router.put('/:id', putAutor);
+router.delete('/:id', deleteAutor);
 
 module.exports = router;
