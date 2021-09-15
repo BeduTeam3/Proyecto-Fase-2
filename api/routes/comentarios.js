@@ -8,6 +8,7 @@ const {
 } = require('../controllers/comentarios')
 
 router.get('/', getComentario)
+router.get('/:id', getComentario)
 router.post('/', postComentario)
 router.put('/:id', putComentario)
 router.delete('/:id', deleteComentario)
