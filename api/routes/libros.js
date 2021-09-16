@@ -4,10 +4,14 @@ const {
   getLibro,
   postLibro,
   putLibro,
-  deleteLibro
+  deleteLibro,
+  getByTitle
 } = require('../controllers/libros')
 
 router.get('/', getLibro)
+router.get('/Titulo/:title', getByTitle)
+router.get('/:id', getLibro)
+
 router.post('/', postLibro)
 router.put('/:id', putLibro)
 router.delete('/:id', deleteLibro)
