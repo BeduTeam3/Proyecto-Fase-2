@@ -1,4 +1,3 @@
-//const Libro = require('../models/Libro');
 const mongoose = require('mongoose');
 const Libro = mongoose.model('Libro');
 
