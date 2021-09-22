@@ -6,7 +6,6 @@ const LibroSchema = new mongoose.Schema({
         type: String, 
         required: [true, "El Título no puede ir vacío"], 
         index: true},
-        
     idAuthors: { 
         type: mongoose.Schema.Types.ObjectId, ref: 'Libros',
         required: [true, "Ingrese por lo menos un Id de un Autor"]},

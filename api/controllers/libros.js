@@ -89,7 +89,6 @@ function deleteLibro(req, res, next) { //Borrar
     .catch(next)
 }
 
-
 const autoresMuchosLibros = () => {//Une nombres de autores a todos los libros
   return [{
     '$lookup': {
