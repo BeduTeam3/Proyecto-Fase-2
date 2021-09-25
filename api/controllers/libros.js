@@ -5,7 +5,7 @@ function getLibro(req, res, next) { //Obtener-Leer
   if (req.params.id) {//Obtiene libro por su ID
     let id = req.params.id;
     Libro.aggregate(autoresUnLibro(id))
-      .then(uno => { !uno ? res.status(404).send(`No se encontró el libro "${id}"`) : res.send(uno) })
+      .then(uno => { !uno || uno.length === 0 ? res.status(404).send(`No se encontró el libro "${id}"`) : res.send(uno) })
       .catch(next)
   } else { //Toda la lista de libros
     Libro.aggregate(autoresMuchosLibros())
@@ -27,7 +27,8 @@ function postLibro(req, res, next) { //Crear nuevo libro
   libro.save()
     .then(lib => {
       res.status(200).send(lib)
-    }).catch(e => {//Si hay un error
+    })
+    .catch(e => {//Si hay un error
       if (e instanceof mongoose.Error.ValidationError) {
         return res.status(400).send(e.message);//Si es error de validación
       } else {
@@ -89,6 +90,28 @@ function deleteLibro(req, res, next) { //Borrar
     .catch(next)
 }
 
+//Obtiene los libros más comentados y muestra una cantidad 
+//específica enviado como parámetro en la URL después de ?cantidad=?
+function getMoreComments(req, res, next) {
+  let cantidad = parseInt(req.query.cantidad);//Cantidad de libros a listar en orden ascendente por comentarios (mas comentado al menos)
+  Libro.aggregate(LibrosMasComentados(cantidad))
+    //Si la respuesta viene vacía, se envía estatus 404, de lo contrario se envían libros más comentados
+    .then(r => { r.length === 0 ? res.status(404).send(`No hay información para mostrar`) : res.status(200).send(r) })
+    .catch(e => {//Si hay un error por validación
+      if (e.name === "MongoError") {
+        return res.status(400).send([//Si es error de validación
+          {Mensaje: "CANTIDAD debe ser un valor númerico positivo",
+          Type: e.name, 
+          Error: e.message}]);
+      } else {
+        return res.status(500).send([//Si es error del servidor
+          {Mensaje: "Error Interno",
+          Type: e.name, 
+          Error: e.message}]);
+      }
+    })
+}
+
 const autoresMuchosLibros = () => {//Une nombres de autores a todos los libros
   return [{
     '$lookup': {
@@ -142,11 +165,54 @@ const autoresPorTitulo = (title) => {//Une nombres de autores y filtra según un
   }]
 }
 
+const LibrosMasComentados = (cantidad) => {
+  return [{
+    '$lookup': {
+      'from': 'Comentarios', 
+      'localField': '_id', 
+      'foreignField': 'libro_id', 
+      'as': 'Comments'
+    }
+  }, {
+    '$addFields': {
+      'TotalComments': {
+        '$size': '$Comments'
+      }
+    }
+  }, {
+    '$sort': {
+      'TotalComments': -1
+    }
+  }, {
+    '$limit': cantidad
+  }, {
+    '$project': {
+      '_id': 0, 
+      'idAuthors': 0, 
+      'isbn': 0, 
+      'isbn13': 0, 
+      'publication_year': 0, 
+      'language': 0, 
+      'publisher': 0, 
+      'pages': 0, 
+      'price': 0, 
+      'image_url': 0, 
+      'small_image_url': 0, 
+      'Comments': {
+        '_id': 0, 
+        'libro_id': 0, 
+        'email': 0
+      }
+    }
+  }]
+}
+
 //Exportamos las funciones definidas
 module.exports = {
   getLibro,
   postLibro,
   putLibro,
   deleteLibro,
-  getByTitle
+  getByTitle,
+  getMoreComments
 }
