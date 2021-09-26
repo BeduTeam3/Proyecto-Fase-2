@@ -7,7 +7,6 @@ function crearUsuario(req, res, next) {
     password = body.password;
     delete body.password
   const user = new Usuario(body);
-
   user.crearPassword(password);
   user
     .save()
