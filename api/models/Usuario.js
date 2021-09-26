@@ -1,10 +1,10 @@
 /** Clase que representa a un usuario (Admin o Cliente) de la plataforma*/
-
+const crypto = require("crypto");
+const jwt = require('jsonwebtoken'); 
+const secret = require('../config').secret; 
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
-const crypto = require("crypto");
-const jwt = require('jsonwebtoken');  
-const secret = require('../config').secret; 
+
 
 const UsuarioSchema = new mongoose.Schema(
   {
@@ -22,7 +22,7 @@ const UsuarioSchema = new mongoose.Schema(
       type: String,
       unique: true,
       lowercase: true,
-      required: [true, "no puede estar vacío"],
+      required: [true, "Email no puede estar vacío"],
       match: [/\S+@\S+\.\S+/, "es inválido"],
       index: true,
     },
@@ -38,7 +38,9 @@ const UsuarioSchema = new mongoose.Schema(
   { collection: "Usuarios", timestamps: true }
 );
 
-UsuarioSchema.plugin(uniqueValidator, { message: "Ya existe" });
+UsuarioSchema.plugin(uniqueValidator, { 
+  message: "Ya existe" 
+});
 
 UsuarioSchema.methods.crearPassword = function (password) {
   this.salt = crypto.randomBytes(16).toString("hex"); // generando una "sal" random para cada usuario
