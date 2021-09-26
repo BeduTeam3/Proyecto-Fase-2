@@ -22,6 +22,7 @@ require('./models/Autor');
 require('./models/Comentario');
 require('./models/Libro');
 require('./models/Usuario');
+require('./config/passport')
 
 //Configurando las rutas
 app.use('/v1', require('./routes'));
