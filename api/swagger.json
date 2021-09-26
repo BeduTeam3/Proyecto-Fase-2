@@ -14,7 +14,7 @@
     "version": "1.0.0"
   },
   "servers": [
-        {
+    {
       "url": "http://localhost:4001/v1",
       "description": "servidor local"
     }
@@ -38,11 +38,127 @@
     }
   ],
   "paths": {
+    "/autores": {
+      "post": {
+        "tags": ["Autores"],
+        "summary": "Crear nuevo autor.",
+        "operationId": "crearUsuario",
+        "responses": {
+          "200": {
+            "description": "El autor creado"
+          }
+        },
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Objeto de Autor para crearlo.",
+            "schema": {
+              "$ref": "#/definitions/Autor"
+            }
+          }
+        ]
+      },
+      "get": {
+        "tags": ["Autores"],
+        "summary": "Obtener todos los autores",
+        "operationId": "getAutor",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Objetos de todos los autores",
+            "schema": {
+              "$ref": "#/definitions/Autor"
+            }
+          }
+        }
+      }
+    },
+    "/autores/{id}": {
+      "get": {
+        "tags": ["Autores"],
+        "summary": "Obtener autor por ID",
+        "operationId": "getAutores",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "ID a buscar"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Objeto del autor por su ID",
+            "schema": {
+              "$ref": "#/definitions/Autor"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Autores"],
+        "summary": "Actualizar",
+        "operationId": "modificarUsuario",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "ID del autor"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Autor"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "El autor modificado",
+            "schema": {
+              "$ref": "#/definitions/Autor"
+            }
+          },
+          "404": {
+            "description": "El autor no existe"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Autores"],
+        "summary": "Eliminar autor por su ID",
+        "operationId": "deleteAutor",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "ID del autor"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "El autor fue eliminado"
+          }
+        }
+      }
+    },
     "/Libros": {
       "get": {
-        "tags": [
-          "Libros"
-        ],
+        "tags": ["Libros"],
         "summary": "Obtiene todos los libros",
         "description": "Regresa un array de objetos con todos los libros encontrados en la base de datos.",
         "responses": {
@@ -71,9 +187,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Libros"
-        ],
+        "tags": ["Libros"],
         "summary": "Inserta un nuevo libro a la BD",
         "description": "Crea un nuevo libro con sus datos y lo inserta en la base de datos.",
         "requestBody": {
@@ -114,9 +228,7 @@
     },
     "/Libros/{idLibro}": {
       "get": {
-        "tags": [
-          "Libros"
-        ],
+        "tags": ["Libros"],
         "summary": "Búsqueda de un único libro",
         "description": "Regresa el libro que coincida con el ID",
         "parameters": [
@@ -158,9 +270,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Libros"
-        ],
+        "tags": ["Libros"],
         "summary": "Actualiza un libro",
         "description": "Busca un libro por su ID y actualiza los datos enviados en el body.",
         "parameters": [
@@ -211,9 +321,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Libros"
-        ],
+        "tags": ["Libros"],
         "summary": "Elimina un libro de la BD.",
         "description": "Busca un libro por su ID y lo elimina de la base de datos.",
         "parameters": [
@@ -250,9 +358,7 @@
     },
     "/Libros/Titulo/{frase}": {
       "get": {
-        "tags": [
-          "Libros"
-        ],
+        "tags": ["Libros"],
         "summary": "Búsqueda de libros según la frase ingresada",
         "description": "Regresa el (los) libro (s) que coincidan en el título con la palabra o frase ingresada",
         "parameters": [
@@ -296,11 +402,9 @@
     },
     "/Libros/MasComentados": {
       "get": {
-        "tags": [
-          "Libros"
-        ],
+        "tags": ["Libros"],
         "summary": "Muestra lista descendente de libros más comentados.",
-        "description": "Regresa un listado ordenado de mayor a menor con los libros más comentados, desde un libro hasta n cantidad, según se envíe en \"?cantida=n\"",
+        "description": "Regresa un listado ordenado de mayor a menor con los libros más comentados, desde un libro hasta n cantidad, según se envíe en \"?cantidad=n\"",
         "parameters": [
           {
             "name": "cantidad",
@@ -344,11 +448,7 @@
   "components": {
     "schemas": {
       "Libro": {
-        "required": [
-          "idAuthors",
-          "isbn",
-          "title"
-        ],
+        "required": ["idAuthors", "isbn", "title"],
         "type": "object",
         "properties": {
           "id": {
@@ -394,11 +494,7 @@
         }
       },
       "BodyLibrosPost": {
-        "required": [
-          "idAuthors",
-          "isbn",
-          "title"
-        ],
+        "required": ["idAuthors", "isbn", "title"],
         "type": "object",
         "properties": {
           "title": {
@@ -705,6 +801,119 @@
         "style": "simple",
         "explode": false,
         "schema": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Autor": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "idBooks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Libro": {
+      "type": "object",
+      "required": ["title", "idAuthors", "isbn"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "idAuthors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "isbn": {
+          "type": "string"
+        },
+        "isbn13": {
+          "type": "string"
+        },
+        "publication_year": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "publisher": {
+          "type": "string"
+        },
+        "pages": {
+          "type": "integer"
+        },
+        "price": {
+          "type": "number"
+        },
+        "image_url": {
+          "type": "string"
+        },
+        "small_image_url": {
+          "type": "string"
+        }
+      }
+    },
+    "Usuario": {
+      "type": "object",
+      "required": ["username", "email", "nombre", "apellido"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "nombre": {
+          "type": "string"
+        },
+        "apellido": {
+          "type": "string"
+        },
+        "tipo": {
+          "type": "string",
+          "enum": ["admin", "cliente"]
+        }
+      }
+    },
+    "Comentario": {
+      "type": "object",
+      "required": ["nombre", "email", "texto"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "nombre": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "libro_id": {
+          "type": "string"
+        },
+        "texto": {
+          "type": "string"
+        },
+        "fecha": {
           "type": "string"
         }
       }

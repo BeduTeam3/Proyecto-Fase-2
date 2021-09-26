@@ -31,7 +31,7 @@ function putAutor(req, res, next) {
   //Modificar-Actualizar
   Autor.findById(req.params.id)
 		.then(autor => {
-			if (!autor) { return res.sendStatus(401); }
+			if (!autor) { return res.sendStatus(404); }
 			let nuevaInfo = req.body
 			if (typeof nuevaInfo.nombre !== 'undefined')
 				autor.nombre = nuevaInfo.nombre

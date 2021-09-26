@@ -41,5 +41,5 @@ LibroSchema.methods.publicData = () => {
     };
 };
 
-//Asociamos el Modelo Autor con el esquema Autor
+//Asociamos el Modelo Libro con el esquema Libro
 mongoose.model("Libro", LibroSchema);
