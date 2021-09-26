@@ -3,6 +3,8 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 const crypto = require("crypto");
+const jwt = require('jsonwebtoken');  
+const secret = require('../config').secret; 
 
 const UsuarioSchema = new mongoose.Schema(
   {
@@ -52,7 +54,27 @@ UsuarioSchema.methods.validarPassword = function (password) {
   return this.hash === hash;
 };
 
-UsuarioSchema.methods.publicData = function () {
+UsuarioSchema.methods.generarJWT = function() {
+  const today = new Date();
+  const exp = new Date(today);
+  exp.setDate(today.getDate() + 60); // 60 días antes de expirar
+
+  return jwt.sign({
+    id: this._id,
+    username: this.username,
+    exp: parseInt(exp.getTime() / 1000),
+  }, secret);
+};
+
+UsuarioSchema.methods.toAuthJSON = function(){
+  return {
+    username: this.username,
+    email: this.email,
+    token: this.generarJWT()
+  };
+};
+
+UsuarioSchema.methods.publicData = function(){
   return {
     id: this.id,
     username: this.username,
@@ -60,6 +82,5 @@ UsuarioSchema.methods.publicData = function () {
     nombre: this.nombre,
     apellido: this.apellido,
   };
-};
-
+}
 mongoose.model("Usuario", UsuarioSchema);
