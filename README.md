@@ -21,6 +21,12 @@ Este proyecto es acerca de una API de Libros que permite gestionar el CRUD compl
 
 [Diagrama de Casos de Uso](https://github.com/BeduTeam3/Proyecto-Fase-2/blob/main/BeduF2M2-CasosDeUso.drawio.png)
 
+## Documentación en Swagger
+https://libreriapi.herokuapp.com/v1/api-docs/
+
+## Link de Heroku
+https://libreriapi.herokuapp.com/v1
+
 ## Clonar y correr este proyecto
 
 Clonar la estructura de archivos:
